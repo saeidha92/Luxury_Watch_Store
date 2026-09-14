@@ -1,8 +1,10 @@
+from django.conf import settings
 from django.db import models
 from django.utils.text import slugify
-from django.conf import settings
 
-# Abstract base classes
+# ---------------------------------------------------------------------------
+# base classes
+# ---------------------------------------------------------------------------
 
 
 class BaseModel(models.Model):
@@ -31,7 +33,9 @@ class SluggedMixinModel(models.Model):
         return slug
 
 
-# Brand ------------------
+# ---------------------------------------------------------------------------
+# Brand
+# ---------------------------------------------------------------------------
 
 
 class Brand(BaseModel):
@@ -43,7 +47,9 @@ class Brand(BaseModel):
         return self.name
 
 
-# category ------------------
+# ---------------------------------------------------------------------------
+# Category
+# ---------------------------------------------------------------------------
 
 
 class Category(BaseModel):
@@ -66,7 +72,9 @@ class Category(BaseModel):
         return self.title
 
 
-# Product ------------------
+# ---------------------------------------------------------------------------
+# Product
+# ---------------------------------------------------------------------------
 
 
 class Product(BaseModel, SluggedMixinModel):
@@ -165,7 +173,24 @@ class ProductColor(BaseModel):
         return f"{self.color} ({self.hex_code}) - {self.product.title}"
 
 
-# wishlist --------------------------------------------
+# ---------------------------------------------------------------------------
+# Customer
+# ---------------------------------------------------------------------------
+
+
+class Customer(BaseModel):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="customer"
+    )
+    phone_number = models.CharField(max_length=20, blank=True)
+
+    def __str__(self):
+        return self.user.username
+
+
+# ---------------------------------------------------------------------------
+# WishList
+# ---------------------------------------------------------------------------
 
 
 class WishList(BaseModel):
@@ -184,25 +209,9 @@ class WishList(BaseModel):
         return f"{self.customer} -> {self.product}"
 
 
-# ----------------------------------------------------------
-
-
-# customer -------------------------------------------------
-
-
-class Customer(BaseModel):
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="customer"
-    )
-    phone_number = models.CharField(max_length=20, blank=True)
-
-    def __str__(self):
-        return self.user.username
-
-
-# -------------------------------------------------------------
-
-# comments ----------------------------------------------------
+# ---------------------------------------------------------------------------
+# Comment
+# ---------------------------------------------------------------------------
 
 
 class Comment(BaseModel):
