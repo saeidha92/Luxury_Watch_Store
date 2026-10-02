@@ -26,7 +26,9 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+
+INTERNAL_IPS = ["127.0.0.1"]
 
 
 # Application definition
@@ -40,9 +42,12 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "shop",
     "rest_framework",
+    "debug_toolbar",
 ]
 
+
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
